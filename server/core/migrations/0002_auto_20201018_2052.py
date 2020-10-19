@@ -7,13 +7,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0001_initial'),
+        ("core", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='family',
-            name='hash_number',
-            field=models.PositiveIntegerField(blank=True, validators=[django.core.validators.MaxValueValidator(100)]),
+            model_name="family",
+            name="hash_number",
+            field=models.PositiveIntegerField(
+                blank=True, validators=[django.core.validators.MaxValueValidator(100)]
+            ),
         ),
     ]

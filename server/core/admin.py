@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import User, Family, FamilyCard
+
+from .models import Family, FamilyCard, User
 
 # Register your models here.
 
