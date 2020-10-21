@@ -1,4 +1,5 @@
 import random
+import datetime
 
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
@@ -6,7 +7,9 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.validators import MaxValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils.timezone import now
 
+from rest_framework.authtoken.models import Token
 # Create your models here.
 
 
@@ -52,12 +55,12 @@ class User(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name"]
 
-
 class FamilyCard(models.Model):
     family = models.ForeignKey("core.Family", on_delete=models.CASCADE)
     card_number = models.IntegerField(_("card number"))
-    issue_date = models.DateField(_("date of issue"))
-    expiry_date = models.DateField(_("date of expiry"))
+    issue_date = models.DateField(_("date of issue"),default=now)
+    expiry_date = models.DateField(_("date of expiry"),default=now)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.family.username}"
@@ -84,6 +87,8 @@ class Family(models.Model):
         blank=True,
     )
     members = models.ManyToManyField("core.User")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def random_hash_generator(self):
         num = random.randint(0, 9999)
