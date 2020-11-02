@@ -1,6 +1,6 @@
 import random
-import datetime
 
+from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
@@ -50,20 +50,25 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     username = None
     email = models.EmailField(_("email address"), unique=True)
+    phone_number = PhoneNumberField(_("phone number"),null=True, blank=True, unique=True)
     is_poc = models.BooleanField(_("point of contact"), default=False)
     objects = UserManager()
-    USERNAME_FIELD = "email"
+    USERNAME_FIELD = "phone_number"
     REQUIRED_FIELDS = ["first_name"]
 
 class FamilyCard(models.Model):
     family = models.ForeignKey("core.Family", on_delete=models.CASCADE)
-    card_number = models.IntegerField(_("card number"))
+    card_number = models.IntegerField(_("card number"),blank=True,null=True)
     issue_date = models.DateField(_("date of issue"),default=now)
     expiry_date = models.DateField(_("date of expiry"),default=now)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.family.username}"
+        if self.card_number:
+            status = "OK"
+        else:
+            status = "NV"
+        return f"{self.family.username}-{status}"
 
 
 class Family(models.Model):
@@ -80,9 +85,10 @@ class Family(models.Model):
             "unique": _("A user with that username already exists."),
         },
     )
+    family_name = models.CharField(max_length=256)
     hash_number = models.PositiveIntegerField(
         validators=[
-            MaxValueValidator(9999),
+            MaxValueValidator(99999),
         ],
         blank=True,
     )
@@ -91,7 +97,7 @@ class Family(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def random_hash_generator(self):
-        num = random.randint(0, 9999)
+        num = random.randint(0, 99999)
         try:
             self.objects.get(hash_number=num, username=self.username)
             self.random_hash_generator()

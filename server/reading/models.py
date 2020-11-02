@@ -17,7 +17,6 @@ class Book(models.Model):
                               max_length=128, blank=True, null=True)
     book_collection = models.ForeignKey(BookCollection, on_delete=models.CASCADE)
 
-
 class Chapter(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
 

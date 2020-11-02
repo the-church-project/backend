@@ -39,6 +39,4 @@ urlpatterns = [
     path('login/', views.obtain_auth_token),
     path('api/core/', include(router.urls)),
     path('api/reading/', include(router_reading.urls)),
-
-
 ]

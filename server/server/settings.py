@@ -141,3 +141,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = "/static/"
+
+
+#paytm details
+PAYTM_MERCHANT_ID = env("PAYTM_MERCHANT_ID")
+PAYTM_SECRET_KEY = env("PAYTM_SECRET_KEY")
+PAYTM_WEBSITE = env("PAYTM_WEBSITE")
+PAYTM_CHANNEL_ID = env("PAYTM_CHANNEL_ID")
+PAYTM_INDUSTRY_TYPE_ID = env("PAYTM_INDUSTRY_TYPE_ID")
