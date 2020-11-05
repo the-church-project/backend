@@ -1,27 +1,33 @@
 from django.db import models
 from django.conf import settings
 from core import models as core_models
+from activity import models as activity_models
 import paytm as ptm
 
 # Create your models here.
 
 
-class Transaction(models.Model):
-    class payments_for(models.IntegerChoices):
-        MASS = 0
+# class Products(models.Model):
+#     title = models.CharField(max_length=256)
+#     description = models.TextField(null=True, blank=True)
+#     cost = models.DecimalField(default=100.00, decimal_places=2)
 
+
+class Transaction(models.Model):
     class payment_stat(models.IntegerChoices):
         fail = 0
         success = 1
         processing = 2
 
     user = models.ForeignKey(core_models.User)
-    made_on = models.DateTimeField(auto_now_add=True)
+    activity = models.ForeignKey(activity_models.Activity, on_delete=models.PROTECT)
     amount = models.DecimalField(default=100.00, decimal_places=2)
+
+    made_on = models.DateTimeField(auto_now_add=True)
+
     order_id = models.CharField(
         unique=True, max_length=100, null=True, blank=True)
     checksum = models.CharField(max_length=100, null=True, blank=True)
-    to = models.PositiveSmallIntegerField(payments_for.choices, default=0)
     payment_status = models.PositiveSmallIntegerField(
         choices=payment_start.choices, default=0)
 

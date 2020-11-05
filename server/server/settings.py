@@ -33,6 +33,8 @@ ALLOWED_HOSTS = ["localhost"]
 
 AUTH_USER_MODEL = "core.User"
 
+ERROR_MODEL = "core.ErrorLog"
+
 # Application definition
 
 INSTALLED_APPS = [

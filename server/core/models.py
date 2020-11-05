@@ -123,3 +123,11 @@ class Family(models.Model):
             "hash_number",
         )
         verbose_name_plural = "Families"
+
+class ErrorLog(models.Model):
+    time = models.DateTimeField(auto_now_add=True)
+    type = models.CharField(max_length=256)
+    description = models.TextField()
+
+    def __str__(self):
+        return f"{self.time}"
