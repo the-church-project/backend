@@ -39,12 +39,17 @@ class UserRegister(forms.ModelForm):
         cleaned_data = super().clean()
         if not cleaned_data.get('password') == cleaned_data.get('confirm_password'):
             raise ValidationError('passwords do not match please re-try')
-        if self.Meta.model.objects.get(email=cleaned_data.filter('email')).exists():
+        if self.Meta.model.objects.filter(email=cleaned_data.filter('email')).exists():
             raise ValidationError('email already exists try loging in or retry with a new email')
-        if self.Meta.model.objects.get(phone_number=cleaned_data.filter('phone_number')).exists():
+        if self.Meta.model.objects.filter(phone_number=cleaned_data.filter('phone_number')).exists():
             raise ValidationError('phone number already exists try loging in or retry with a new phone number')
 
 class FamilyRegister(forms.ModelForm):
     class Meta:
         model = core_models.Family
         fields = ['username', 'family_name']
+
+class FamilyAdd(forms.ModelForm):
+    class Meta:
+        model = core_models.Family
+        fields = ['family_name', 'username', 'hash_number']

@@ -13,4 +13,4 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 @receiver(post_save, sender=core_models.Family)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
-        core_models.FamilyCardy.objects.create(family=instance)
+        core_models.FamilyCard.objects.create(family=instance)

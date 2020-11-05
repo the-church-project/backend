@@ -36,7 +36,9 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     
     # path('api-auth/', include('rest_framework.urls')),
-    path('login/', views.obtain_auth_token),
-    path('api/core/', include(router.urls)),
-    path('api/reading/', include(router_reading.urls)),
+    # path('login/', views.obtain_auth_token),
+    # path('api/core/', include(router.urls)),
+    # path('api/reading/', include(router_reading.urls)),
+
+    
 ]

@@ -4,27 +4,42 @@ from django.conf import settings
 from django.utils.timezone import datetime
 from core import models as core_models
 from django import forms
+
+
+class DaysOFTheWeek(models.Model):
+    day = models.CharField(max_length=64)
+    alias = models.CharField(max_length=16)
+
+    def __str__(self):
+        return self.day
+
+
 class ActivityMain(models.Model):
 
     class ActivityType(models.IntegerChoices):
-        One_time = 1
-        Recursive = 2
+        Mass = 0
 
     title = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    slug = models.CharField(max_length=255, editable=False)
     type = models.PositiveSmallIntegerField(
-        choices=ActivityType.choices, default=1)
+        choices=ActivityType.choices, default=0)
+    slug = models.CharField(max_length=255, editable=False)
+    is_recurring = models.BooleanField(default=False)
     start_date = models.DateTimeField(default=datetime.now)
-    end_date = models.DateTimeField(default=datetime.now)
-
+    end_date = models.DateTimeField(null=True, blank=True)
 
     def make_title(self):
-        return f'{self.date_time} Activity {self.type}'
+        if self.is_recurring:
+            _type = 'recurring'
+        else:
+            _type = 'one-time'
+        return f'{self.date_time} Activity {_type}'
 
     def save(self, *args, **kwargs):
         if not self.title:
             self.title = self.make_title()
+        if not self.is_recurring:
+            self.end_date = datetime.now
         self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
@@ -32,13 +47,15 @@ class ActivityMain(models.Model):
         return self.title
 
     class Meta:
-        abstract = True
+        pass
 
-class ActivitySub(models.Model):
+
+class ActivitySchedule(models.Model):
     activity_main = models.ForeignKey(ActivityMain, on_delete=models.CASCADE)
+    added_description = models.TextField(null=True, blank=False)
     time = models.TimeField(default=datetime.now)
-    days = models.
-
+    duration_days = models.PositiveSmallIntegerField(default=1)
+    days_of_week = models.ForeignKey(DaysOFTheWeek, on_delete=models.PROTECT)
 
 
 class Mass(Activity):

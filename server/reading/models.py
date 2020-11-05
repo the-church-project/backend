@@ -1,6 +1,7 @@
 # import datetime
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils.timezone import now
 
 # Create your models here.
 
@@ -35,6 +36,10 @@ class Verse(models.Model):
 
 
 class Reading(models.Model):
-    title = models.CharField(max_length=512)
-    date_time = models.DateTimeField(auto_now=True)
-    Author = models.ForeignKey("core.User", on_delete=models.CASCADE)
+    title = models.CharField(max_length=128)
+    description = models.TextField(null=True, blank=True)
+    content = models.TextField()
+    image = models.FilePathField(null=True,blank=True)
+    date_time = models.DateTimeField(default=now)
+    end_time = models.DateTimeField()
+    author = models.ForeignKey("core.User", on_delete=models.CASCADE)
