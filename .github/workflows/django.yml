@@ -14,6 +14,9 @@ env:
   PAYTM_WEBSITE: ${{ secrets.PAYTM_WEBSITE }}
   PAYTM_CHANNEL_ID: ${{ secrets.PAYTM_CHANNEL_ID }}
   PAYTM_INDUSTRY_TYPE_ID: ${{ secrets.PAYTM_INDUSTRY_TYPE_ID }}
+  ADMIN_NAME: ${{ secrets.ADMIN_NAME }}
+  ADMIN_PHONE: ${{ secrets.ADMIN_PHONE }}
+  ADMIN_PASS: ${{ secrets.ADMIN_PASS }}
 
 
 jobs:
