@@ -1,44 +1,45 @@
 from django.db import models
 from django.conf import settings
+from django.shortcuts import reverse
+from django.utils.text import slugify
+
 from core import models as core_models
 from activity import models as activity_models
-import paytm as ptm
+from . import paytm as ptm
 
 # Create your models here.
 
 
-# class Products(models.Model):
-#     title = models.CharField(max_length=256)
-#     description = models.TextField(null=True, blank=True)
-#     cost = models.DecimalField(default=100.00, decimal_places=2)
-
-
 class Transaction(models.Model):
+    call_back_url = None
+
     class payment_stat(models.IntegerChoices):
         fail = 0
         success = 1
         processing = 2
 
-    user = models.ForeignKey(core_models.User)
-    activity = models.ForeignKey(activity_models.Activity, on_delete=models.PROTECT)
-    amount = models.DecimalField(default=100.00, decimal_places=2)
+    # activity = models.ForeignKey(activity_models.Activity, on_delete=models.PROTECT)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.SET_NULL, null=True)
+    amount = models.DecimalField(
+        default=100.00, decimal_places=2, max_digits=10)
 
-    made_on = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     order_id = models.CharField(
         unique=True, max_length=100, null=True, blank=True)
     checksum = models.CharField(max_length=100, null=True, blank=True)
     payment_status = models.PositiveSmallIntegerField(
-        choices=payment_start.choices, default=0)
+        choices=payment_stat.choices, default=2)
 
     def save(self, *args, **kwargs):
         if self.order_id is None and self.made_on and self.id:
             self.order_id = self.made_on.strftime(
                 'PAY2CHURCH%Y%m%dODR') + str(self.id)
-    return super().save(*args, **kwargs)
+        return super().save(*args, **kwargs)
 
     def _get_params(self, call_back_url=None):
-        if not call_back_url:
+        if not self.call_back_url:
             call_back_url = 'http://127.0.0.1:8000/callback/'
         params = {
             'MID': settings.PAYTM_MERCHANT_ID,
@@ -56,7 +57,9 @@ class Transaction(models.Model):
         return params
 
     def gen_checksum(self):
-        return checksum = ptm.generate_checksum(self._get_params(), settings.PAYTM_SECRET_KEY)
+        checksum = ptm.generate_checksum(
+            self._get_params(), settings.PAYTM_SECRET_KEY)
+        return checksum
 
     def get_params(self):
         params = self._get_params()
@@ -77,6 +80,8 @@ class Transaction(models.Model):
             paytm_params, settings.PAYTM_SECRET_KEY, str(paytm_checksum))
         if is_valid_checksum and response_code == '01':
             self.payment_status = 1
-        if status == 'PENDING'
-        self.payment_status = 2
+        if status == 'PENDING':
+            self.payment_status = 2
+        else:
+            self.payment_status = 0
         return paytm_params

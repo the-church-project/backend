@@ -9,7 +9,7 @@ from django import forms
 from django.utils.dateformat import DateFormat
 
 
-class DaysOFTheWeek(models.Model):
+class DaysOfTheWeek(models.Model):
     day = models.CharField(max_length=64)
     alias = models.CharField(max_length=16)
 
@@ -31,8 +31,7 @@ class ActivityMain(models.Model):
     start_date = models.DateTimeField(default=datetime.now)
     end_date = models.DateTimeField(null=True, blank=True)
     time = models.TimeField(default=datetime.now)
-    days_of_week = models.ManyToManyField(
-        DaysOFTheWeek, on_delete=models.PROTECT)
+    days_of_week = models.ManyToManyField(DaysOfTheWeek)
     duration_days = models.PositiveSmallIntegerField(default=1)
 
     def __init__(self, *args, **kwargs):
@@ -105,23 +104,3 @@ class Activity(models.Model):
         if not self.time:
             self.time = self.parent.time
         super().save()
-
-
-class MasIntentionDescription(models.Model):
-    class IntnetionType(models.IntegerChoices):
-        Thanksgiving = 0
-        Late = 1
-        other = 2
-
-    type = models.PositiveSmallIntegerField(
-        choices=IntnetionType.choices, default=0)
-    reason = models.TextField(null=True, blank=True)
-
-    class Meta:
-        abstract = True
-
-
-class Massintentions(MasIntentionDescription):
-    mass = models.ForeignKey(EucCelb, on_delete=models.CASCADE)
-    payment = models.ForeignKey(Payments, on_delete=models.PROTECT)
-    by = models.TextField()

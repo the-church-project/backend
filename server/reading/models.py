@@ -1,4 +1,4 @@
-# import datetime
+import datetime
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import now
@@ -36,10 +36,21 @@ class Verse(models.Model):
 
 
 class Reading(models.Model):
+    DEFAULT_DAYS=1
+
     title = models.CharField(max_length=128)
     description = models.TextField(null=True, blank=True)
     content = models.TextField()
-    image = models.FilePathField(null=True,blank=True)
     date_time = models.DateTimeField(default=now)
-    end_time = models.DateTimeField()
+    end_time = models.DateTimeField(null=True, blank=True)
     author = models.ForeignKey("core.User", on_delete=models.CASCADE)
+    # image = models.ImageField(null=True,blank=True)
+
+    def save(self):
+        if not self.end_time:
+            self.end_time = now() + datetime.timedelta(days=self.DEFAULT_DAYS)
+        super().save()
+
+
+    def __str__(self):
+        return f"{self.title} - {self.date_time}"

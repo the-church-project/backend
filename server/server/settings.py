@@ -49,6 +49,9 @@ INSTALLED_APPS = [
     "rest_framework",
     "core.apps.CoreConfig",
     "reading.apps.ReadingConfig",
+    "activity.apps.ActivityConfig",
+    "store.apps.StoreConfig",
+    "payments.apps.PaymentsConfig",
 ]
 
 MIDDLEWARE = [
@@ -152,3 +155,9 @@ PAYTM_SECRET_KEY = env("PAYTM_SECRET_KEY")
 PAYTM_WEBSITE = env("PAYTM_WEBSITE")
 PAYTM_CHANNEL_ID = env("PAYTM_CHANNEL_ID")
 PAYTM_INDUSTRY_TYPE_ID = env("PAYTM_INDUSTRY_TYPE_ID")
+
+
+# Admin Details
+ADMIN_NAME = env("ADMIN_NAME")
+ADMIN_PHONE = env("ADMIN_PHONE")
+ADMIN_PASS = env("ADMIN_PASS")

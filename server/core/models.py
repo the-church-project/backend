@@ -51,7 +51,7 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(_("email address"), unique=True, null=True, blank=True,)
     phone_number = PhoneNumberField(_("phone number"), unique=True)
-    dob = models.DateField(null=False, blank=True)
+    dob = models.DateField(null=True, blank=True)
     family = models.ForeignKey("core.Family", on_delete=models.CASCADE, null=True, blank=True)
     is_poc = models.BooleanField(_("point of contact"), default=False)
     objects = UserManager()
