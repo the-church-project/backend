@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('activity', '0003_remove_activitymain_days_of_week'),
+        ("activity", "0003_remove_activitymain_days_of_week"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='activitymain',
-            name='days_in_week',
-            field=models.ManyToManyField(blank=True, to='activity.DaysOfTheWeek'),
+            model_name="activitymain",
+            name="days_in_week",
+            field=models.ManyToManyField(blank=True, to="activity.DaysOfTheWeek"),
         ),
     ]

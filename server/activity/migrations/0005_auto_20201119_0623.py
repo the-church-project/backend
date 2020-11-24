@@ -6,18 +6,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('activity', '0004_activitymain_days_in_week'),
+        ("activity", "0004_activitymain_days_in_week"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='activitymain',
-            name='is_spc',
+            model_name="activitymain",
+            name="is_spc",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='activitymain',
-            name='type',
-            field=models.PositiveSmallIntegerField(choices=[(0, 'Mass'), (1, 'Other')], default=0),
+            model_name="activitymain",
+            name="type",
+            field=models.PositiveSmallIntegerField(
+                choices=[(0, "Mass"), (1, "Other")], default=0
+            ),
         ),
     ]

@@ -114,19 +114,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGIN_URL='/admin/login/'
+LOGIN_URL = "/admin/login/"
 
-#rest framework settings
+# rest framework settings
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.TokenAuthentication",
     ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ),
 }
-
 
 
 # Internationalization
@@ -149,7 +148,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 
 
-#paytm details
+# paytm details
 PAYTM_MERCHANT_ID = env("PAYTM_MERCHANT_ID")
 PAYTM_SECRET_KEY = env("PAYTM_SECRET_KEY")
 PAYTM_WEBSITE = env("PAYTM_WEBSITE")
@@ -162,5 +161,5 @@ ADMIN_NAME = env("ADMIN_NAME")
 ADMIN_PHONE = env("ADMIN_PHONE")
 ADMIN_PASS = env("ADMIN_PASS")
 
-#celery 
-CELERY_BROKER_URL = 'redis://localhost:6379'
+# celery
+CELERY_BROKER_URL = "redis://localhost:6379"

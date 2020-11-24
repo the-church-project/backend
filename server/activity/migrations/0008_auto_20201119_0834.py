@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('activity', '0007_auto_20201119_0708'),
+        ("activity", "0007_auto_20201119_0708"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='activitymain',
-            name='days_in_week',
-            field=models.ManyToManyField(to='activity.DaysOfTheWeek'),
+            model_name="activitymain",
+            name="days_in_week",
+            field=models.ManyToManyField(to="activity.DaysOfTheWeek"),
         ),
     ]

@@ -1,10 +1,12 @@
 from django.contrib import admin
+
 from . import models
+
 # register your models here.
 
 
 class ActivityMainAdmin(admin.ModelAdmin):
-    filter_horizontal = ('days_in_week',)
+    filter_horizontal = ("days_in_week",)
 
 
 admin.site.register(models.Activity)

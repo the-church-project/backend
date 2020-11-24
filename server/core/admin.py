@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Family, FamilyCard, User, ErrorLog
+from .models import ErrorLog, Family, FamilyCard, User
 
 # register your models here.
 

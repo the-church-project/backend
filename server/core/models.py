@@ -1,15 +1,15 @@
 import random
 
-from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.validators import MaxValueValidator
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import now
-
+from django.utils.translation import gettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
 from rest_framework.authtoken.models import Token
+
 # Create your models here.
 
 
@@ -49,10 +49,17 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
     username = None
-    email = models.EmailField(_("email address"), unique=True, null=True, blank=True,)
+    email = models.EmailField(
+        _("email address"),
+        unique=True,
+        null=True,
+        blank=True,
+    )
     phone_number = PhoneNumberField(_("phone number"), unique=True)
     dob = models.DateField(null=True, blank=True)
-    family = models.ForeignKey("core.Family", on_delete=models.CASCADE, null=True, blank=True)
+    family = models.ForeignKey(
+        "core.Family", on_delete=models.CASCADE, null=True, blank=True
+    )
     is_poc = models.BooleanField(_("point of contact"), default=False)
     objects = UserManager()
     USERNAME_FIELD = "phone_number"
@@ -61,11 +68,12 @@ class User(AbstractUser):
     def __str__(self):
         return f"{self.phone_number}"
 
+
 class FamilyCard(models.Model):
     family = models.OneToOneField("core.Family", on_delete=models.CASCADE)
-    card_number = models.IntegerField(_("card number"),blank=True,null=True)
-    issue_date = models.DateField(_("date of issue"),default=now)
-    expiry_date = models.DateField(_("date of expiry"),default=now)
+    card_number = models.IntegerField(_("card number"), blank=True, null=True)
+    issue_date = models.DateField(_("date of issue"), default=now)
+    expiry_date = models.DateField(_("date of expiry"), default=now)
     updated_at = models.DateTimeField(auto_now=True)
     is_verified = models.BooleanField(default=False)
 
@@ -123,6 +131,7 @@ class Family(models.Model):
             "hash_number",
         )
         verbose_name_plural = "Families"
+
 
 class ErrorLog(models.Model):
     time = models.DateTimeField(auto_now_add=True)

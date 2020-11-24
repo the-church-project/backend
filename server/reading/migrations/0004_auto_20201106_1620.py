@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('reading', '0003_remove_reading_image'),
+        ("reading", "0003_remove_reading_image"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='reading',
-            name='end_time',
+            model_name="reading",
+            name="end_time",
             field=models.DateTimeField(blank=True, null=True),
         ),
     ]

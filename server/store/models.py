@@ -1,12 +1,12 @@
-from django.db import models
+from activity import models as activity_models
 from django.conf import settings
+from django.db import models
 from django.shortcuts import reverse
 from django.utils.text import slugify
-
-from activity import models as activity_models
 from payments import models as payment_models
 
 # Create your models here.
+
 
 class MasIntentionDescription(models.Model):
     class IntnetionType(models.IntegerChoices):
@@ -14,8 +14,7 @@ class MasIntentionDescription(models.Model):
         Late = 1
         other = 2
 
-    type = models.PositiveSmallIntegerField(
-        choices=IntnetionType.choices, default=0)
+    type = models.PositiveSmallIntegerField(choices=IntnetionType.choices, default=0)
     text = models.TextField(null=True, blank=True)
 
     class Meta:
@@ -25,13 +24,10 @@ class MasIntentionDescription(models.Model):
 class Massintentions(MasIntentionDescription):
     amount = models.DecimalField(default=100.00, decimal_places=2, max_digits=10)
     activity = models.ForeignKey(activity_models.Activity, on_delete=models.CASCADE)
-    payment = models.ForeignKey(payment_models.Transaction, on_delete=models.PROTECT, null=True, blank=True)
+    payment = models.ForeignKey(
+        payment_models.Transaction, on_delete=models.PROTECT, null=True, blank=True
+    )
     by = models.TextField()
-
-
-
-
-
 
 
 class Category(models.Model):
@@ -53,7 +49,6 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
-
 
     def save(self):
         if not self.slug:
@@ -79,8 +74,7 @@ class Product(models.Model):
 
 
 class OrderItem(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     ordered = models.BooleanField(default=False)
     item = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
@@ -113,28 +107,31 @@ class Coupon(models.Model):
     def __str__(self):
         return self.code
 
+
 class Order(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     ref_code = models.CharField(max_length=20, blank=True, null=True)
     items = models.ManyToManyField(OrderItem)
     start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField()
     ordered = models.BooleanField(default=False)
-    payment = models.ForeignKey(payment_models.Transaction, on_delete=models.SET_NULL, blank=True, null=True)
+    payment = models.ForeignKey(
+        payment_models.Transaction, on_delete=models.SET_NULL, blank=True, null=True
+    )
     coupon = models.ForeignKey(
-        'Coupon', on_delete=models.SET_NULL, blank=True, null=True)
+        "Coupon", on_delete=models.SET_NULL, blank=True, null=True
+    )
     refund_requested = models.BooleanField(default=False)
     refund_granted = models.BooleanField(default=False)
 
-    '''
+    """
     1. Item added to cart
     3. Payment
     (Preprocessing, processing, packaging etc.)
     4. Being delivered
     5. Received
     6. Refunds
-    '''
+    """
 
     def __str__(self):
         return self.user.username

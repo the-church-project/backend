@@ -1,11 +1,12 @@
 from datetime import timedelta
 
-from django.db import models
-from django.utils.text import slugify
-from django.conf import settings
 from core import models as core_models
+from django.conf import settings
+from django.db import models
 from django.utils.dateformat import DateFormat
-from django.utils.timezone import utc, now
+from django.utils.text import slugify
+from django.utils.timezone import now, utc
+
 
 class DaysOfTheWeek(models.Model):
     day = models.CharField(max_length=64)
@@ -16,15 +17,13 @@ class DaysOfTheWeek(models.Model):
 
 
 class ActivityMain(models.Model):
-
     class ActivityType(models.IntegerChoices):
         Mass = 0
         Other = 1
 
     title = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    type = models.PositiveSmallIntegerField(
-        choices=ActivityType.choices, default=0)
+    type = models.PositiveSmallIntegerField(choices=ActivityType.choices, default=0)
     slug = models.CharField(max_length=255, editable=False)
     is_recurring = models.BooleanField(default=False)
     start_date = models.DateTimeField(default=now)
@@ -54,7 +53,7 @@ class ActivityMain(models.Model):
         return _list
 
     def get_occurance(self, start, end):
-        new_list = self.days_in_week.all().values_list('day')
+        new_list = self.days_in_week.all().values_list("day")
         _list = []
         for a in range(len(new_list)):
             _list.append(new_list[a][0])
@@ -79,13 +78,13 @@ class ActivityMain(models.Model):
 
     def make_title(self):
         if self.is_recurring:
-            _type = 'recurring'
+            _type = "recurring"
         else:
-            _type = 'one-time'
+            _type = "one-time"
         th = DateFormat(self.start_date).S()
         mon = DateFormat(self.start_date).M()
         date = DateFormat(self.start_date).d()
-        return f'{date}{th}/{mon} Activity {_type}'
+        return f"{date}{th}/{mon} Activity {_type}"
 
     def save(self, *args, **kwargs):
         if not self.title:
@@ -93,7 +92,7 @@ class ActivityMain(models.Model):
         if not self.is_recurring and not self.end_date:
             self.end_date = now()
         self.slug = slugify(self.title)
-        super(ActivityMain, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.title}"
@@ -108,4 +107,4 @@ class Activity(models.Model):
     def save(self, *args, **kwargs):
         if not self.time:
             self.time = self.parent.time
-        super(Activity, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)

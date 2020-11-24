@@ -1,5 +1,6 @@
 from django.contrib import admin
-from . import models 
+
+from . import models
 
 # register your models here.
 
