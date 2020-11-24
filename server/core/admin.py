@@ -1,9 +1,10 @@
 from django.contrib import admin
 
-from .models import Family, FamilyCard, User
+from .models import Family, FamilyCard, User, ErrorLog
 
-# Register your models here.
+# register your models here.
 
 admin.site.register(User)
 admin.site.register(Family)
 admin.site.register(FamilyCard)
+admin.site.register(ErrorLog)

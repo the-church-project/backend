@@ -2,4 +2,6 @@ from django.apps import AppConfig
 
 
 class ActivityConfig(AppConfig):
-    name = 'activity'
+    name = "activity"
+    def ready(self):
+        import activity.signals

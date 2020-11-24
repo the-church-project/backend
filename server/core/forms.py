@@ -45,6 +45,10 @@ class UserRegister(forms.ModelForm):
             raise ValidationError('phone number already exists try loging in or retry with a new phone number')
 
 class FamilyRegister(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(FamilyRegister, self).__init__(*args, **kwargs)
+
     class Meta:
         model = core_models.Family
         fields = ['username', 'family_name']
