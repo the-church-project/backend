@@ -12,5 +12,5 @@ class UserF(factory.Factory):
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
     email = factory.LazyAttribute(f"{first_name}.{last_name}@example.com".lower())
-    date_joined = factory.LazyFunction(datetime.now)
+    date_joined = factory.LazyFunction(datetime.datetime.now())
     admin = True

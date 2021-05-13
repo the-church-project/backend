@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+<h1>Test</h1>
+
+{% if user.is_authenticated %}
+<p>{{user.first_name}}</p><br>
+<a href="{% url 'core:logout' %}">Logout</a>
+{% else %}
+<a href="{% url 'core:login' %}">Login</a>
+<a href="{% url 'core:usercreate' %}">Sign in</a>
+{% endif %}
+
+{% endblock %}

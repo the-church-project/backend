@@ -1,0 +1,54 @@
+<!-- <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    function getCookie(name = 'csrftoken') {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+    function onPaymentComplete(response) {
+        $.ajax('/api/v1/payment-complete', {
+             method: "POST",
+             headers: {
+                 'X-CSRFToken': getCookie()
+             },
+             data: response,
+             success: (res) => {
+                 window.location.href = '/lri/detail'
+             },
+             error: (res) => console.error(`Error: ${res}`)
+        })
+    }
+
+    const options = {
+        "key": "{{ rzp_key_id }}",
+        "amount": "{{product.price}}",
+        "currency": "INR",
+        "name": "Launchspace Innovations",
+        "description": "{{product.name}}",
+        "image": "https://launchspace.sgp1.digitaloceanspaces.com/website/fav.png",
+        "handler": onPaymentComplete,
+        "prefill": {
+            "name": "{{request.user.name}}",
+            "email": "{{request.user.email}}",
+            "contact": "{{request.user.phone_number}}"
+        },
+        "modal": {
+            "ondismiss": function () {
+                analytics.logEvent('payment_dismissed')
+            }
+        },
+        "theme": {
+            "color": "#FE3535"
+        }
+    };
+    const rzp = new Razorpay(options);
+
+    $('.rzp-button').on('click', (e) => {
+        analytics.logEvent('payment_start')
+        e.preventDefault();
+        $('.modal').modal('hide');
+        rzp.open();
+    })
+</script> -->
+
+<!-- need to make it for paypal -->

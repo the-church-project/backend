@@ -38,4 +38,6 @@ urlpatterns = [
     # path('login/', views.obtain_auth_token),
     # path('api/core/', include(router.urls)),
     # path('api/reading/', include(router_reading.urls)),
+    # path('accounts/', include('django.contrib.auth.urls')),
+    path('',include('core.urls'))
 ]

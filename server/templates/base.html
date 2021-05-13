@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{% block title %} {% endblock %} | theChurchProject </title>
+    
+    <!-- favicon -->
+    {% include 'partials/favicon.html' %}    
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% include 'partials/open_graph.html' %}
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel='stylesheet' href="{% static 'assets/styles/bootstrap.css' %}">
+    <link rel='stylesheet' href="{% static 'assets/styles/custom.css' %}">
+
+    {% block styles %}{% endblock %}
+</head>
+
+<body>
+    {% include 'partials/messages.html' %}
+    <!-- <div id="menu" class="inactive px-4">
+        <div class="d-flex my-5 justify-content-between align-items-center">
+            <img height="40" width="40" src="" />
+            <button id="menu-close-btn" class="btn p-0"><i class="fa fa-close"></i></button>
+        </div>
+        <ul class="m-0 p-0">
+            <li class="p-0"><a href="/lri">Test</a></li>
+        </ul>
+        {% if not user.is_authenticated %}
+            <hr class="mb-5">
+            <p class="mb-4">continue to your account</p>
+            <div class="d-flex justify-content-between">
+                <a href="/login" class="btn btn-success w-100 mr-3">login</a>
+                <a href="/sign-up" class="btn btn-dark w-100">sign up</a>
+            </div>
+        {% else %}
+            <a style="position: relative; top: 25rem" href="/logout" class="btn btn-block btn-dark">Logout</a>
+        {% endif %}
+    </div> -->
+
+    <article>
+        <header>
+            {% block navbar %} {% include 'navbar.html' %} {% endblock  %}
+        </header>
+        <main class="container-fluid">
+            {% block content %}{% endblock %}
+        </main>
+        <footer>
+            {% block footer %} {% include 'footer.html' %} {% endblock %}
+        </footer>
+    </article>
+
+    {% if not debug %}
+    {% include 'partials/hotjar.html' %}
+    {% endif %}
+
+    <script src="{% static 'assets/scripts/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'assets/scripts/popper.min.js' %}"></script>
+    <script src="{% static 'assets/scripts/bootstrap.min.js' %}"></script>
+
+    <script>
+    // Smooth Scroll
+    // Select all links with hashes
+    $('a[href*="#"]')
+    // Remove links that don't actually link to anything
+    .not('[href="#"]')
+    .not('[href="#0"]')
+    .not('[href="#strength_carousel"]')
+    .not('[href="#weakness_carousel"]')
+    .click(function(event) {
+        // On-page links
+        if (
+        location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') 
+        && 
+        location.hostname == this.hostname
+        ) {
+        // Figure out element to scroll to
+        var target = $(this.hash);
+        target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+        // Does a scroll target exist?
+        if (target.length) {
+            // Only prevent default if animation is actually gonna happen
+            event.preventDefault();
+            $('html, body').animate({
+            scrollTop: target.offset().top
+            }, 1000, function() {
+            // Callback after animation
+            // Must change focus!
+            var $target = $(target);
+            $target.focus();
+            if ($target.is(":focus")) { // Checking if the target was focused
+                return false;
+            } else {
+                $target.attr('tabindex','-1'); // Adding tabindex for elements not focusable
+                $target.focus(); // Set focus again
+            };
+            });
+        }
+        }
+    });
+    </script>
+
+    
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfTBvkUAAAAAInRgbp61u8m5nYPlSYIVE25BfGS"></script>
+        <script>
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6LfTBvkUAAAAAInRgbp61u8m5nYPlSYIVE25BfGS', {action: 'homepage'})
+        });
+        </script>
+
+    <script src="{% static 'assets/scripts/contact.js' %}"></script>
+
+    
+    <script src="https://kit.fontawesome.com/36bf67c002.js" crossorigin="anonymous"></script>
+    
+    {% block scripts %}{% endblock %}
+   
+</body>
+
+</html>

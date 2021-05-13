@@ -30,6 +30,9 @@ class Massintentions(MasIntentionDescription):
     by = models.TextField()
 
 
+# Abstract true for all the models below
+
+
 class Category(models.Model):
     title = models.CharField(max_length=256)
     description = models.TextField(blank=True, null=True)
@@ -106,6 +109,10 @@ class Coupon(models.Model):
 
     def __str__(self):
         return self.code
+
+    class Meta:
+        abstract = True
+
 
 
 class Order(models.Model):
