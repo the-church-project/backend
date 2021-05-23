@@ -45,13 +45,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "phonenumber_field",
-    "rest_framework.authtoken",
     "rest_framework",
+    "rest_framework.authtoken",
     "core.apps.CoreConfig",
     "reading.apps.ReadingConfig",
-    "activity.apps.ActivityConfig",
-    "store.apps.StoreConfig",
-    "payments.apps.PaymentsConfig",
+    # "activity.apps.ActivityConfig",
+    # "store.apps.StoreConfig",
+    # "payments.apps.PaymentsConfig",
 ]
 
 MIDDLEWARE = [
@@ -123,7 +123,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
 }
 

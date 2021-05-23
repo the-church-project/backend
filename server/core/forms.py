@@ -1,5 +1,5 @@
 from django import forms
-import core.models as core_models
+from . import models as core_models
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.utils.text import gettext_lazy as _
