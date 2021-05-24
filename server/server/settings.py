@@ -16,10 +16,6 @@ from pathlib import Path
 import django_heroku
 import environ
 
-# Activate Django-Heroku.
-django_heroku.settings(locals())
-
-
 env = environ.Env()
 environ.Env.read_env()
 
@@ -174,3 +170,6 @@ ADMIN_PASS = env("ADMIN_PASS")
 
 # celery
 CELERY_BROKER_URL = "redis://localhost:6379"
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
