@@ -1,13 +1,15 @@
 import re
+
+from django.contrib.auth import authenticate
+from django.contrib.auth.views import LoginView
 from django.shortcuts import render
+# from . import forms
+from django.views.generic import CreateView, TemplateView
 from rest_framework.authtoken import views
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
+
 from .serializers import UserSerializer
-from django.contrib.auth import authenticate
-from django.contrib.auth.views import LoginView
-# from . import forms
-from django.views.generic import TemplateView, CreateView
 
 # Create your views here.
 

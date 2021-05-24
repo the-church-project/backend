@@ -1,14 +1,13 @@
 from datetime import timedelta
 
-from django.db import models
-from django.utils.text import slugify
-from django.conf import settings
-from django.utils.timezone import datetime
-from . import models as core_models
 from django import forms
+from django.conf import settings
+from django.db import models
 from django.utils.dateformat import DateFormat
 from django.utils.text import slugify
-from django.utils.timezone import now, utc
+from django.utils.timezone import datetime, now, utc
+
+from . import models as core_models
 
 
 class DaysOfTheWeek(models.Model):

@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.utils.timezone import now
 from django.views.generic.list import MultipleObjectMixin
+
 from . import models as reading_models
+
 # Create your views here.
 
 class DailyReadingMixin(MultipleObjectMixin):

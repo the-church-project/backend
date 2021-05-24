@@ -1,7 +1,8 @@
-from django.urls import path, include
-from . import models as core_models
+from django.urls import include, path
 from rest_framework import serializers, viewsets
 from rest_framework.authtoken.models import Token
+
+from . import models as core_models
 
 
 class UserSerializer(serializers.ModelSerializer):

@@ -2,10 +2,10 @@
 
 import core.models
 import django.core.validators
-from django.db import migrations, models
 import django.db.models.deletion
 import django.utils.timezone
 import phonenumber_field.modelfields
+from django.db import migrations, models
 
 
 class Migration(migrations.Migration):

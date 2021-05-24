@@ -4,9 +4,9 @@
 
 <head>
     <title>{% block title %} {% endblock %} | theChurchProject </title>
-    
+
     <!-- favicon -->
-    {% include 'partials/favicon.html' %}    
+    {% include 'partials/favicon.html' %}
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,8 +73,8 @@
     .click(function(event) {
         // On-page links
         if (
-        location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') 
-        && 
+        location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
+        &&
         location.hostname == this.hostname
         ) {
         // Figure out element to scroll to
@@ -103,7 +103,7 @@
     });
     </script>
 
-    
+
     <script src="https://www.google.com/recaptcha/api.js?render=6LfTBvkUAAAAAInRgbp61u8m5nYPlSYIVE25BfGS"></script>
         <script>
         grecaptcha.ready(function() {
@@ -113,11 +113,11 @@
 
     <script src="{% static 'assets/scripts/contact.js' %}"></script>
 
-    
+
     <script src="https://kit.fontawesome.com/36bf67c002.js" crossorigin="anonymous"></script>
-    
+
     {% block scripts %}{% endblock %}
-   
+
 </body>
 
 </html>

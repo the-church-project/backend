@@ -129,7 +129,7 @@ class Family(models.Model):
     def query_to_string(query, remove_items_list:str=''):
         string = ' '.join(map(str, query))
         return string.replace('(','').replace(')','').replace(',','\n').replace("'",'')
-            
+
 
     def random_hash_generator(self):
         num = random.randint(0, 99999)

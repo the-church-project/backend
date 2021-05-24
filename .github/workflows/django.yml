@@ -5,7 +5,7 @@ on:
       branches: [master,development]
    pull_request:
       branches: [master,development]
-      
+
 env:
    DEBUG: ${{ secrets.DEBUG }}
    SECRET_KEY: ${{ secrets.SECRET_KEY }}

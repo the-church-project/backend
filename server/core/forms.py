@@ -1,18 +1,18 @@
 from django import forms
-from . import models as core_models
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.utils.text import gettext_lazy as _
-from phonenumber_field.validators import (
-    validate_international_phonenumber as validate_phone,
-)
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from phonenumber_field.validators import \
+    validate_international_phonenumber as validate_phone
+
+from . import models as core_models
 
 # create the custom forms for the core model
 
 class UserLogin(AuthenticationForm):
     email_phone = forms.CharField(max_length=256)
-    
+
     def clean(self):
         cleaned_data = super().clean()
         try:
