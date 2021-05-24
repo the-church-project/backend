@@ -60,18 +60,31 @@ class User(AbstractUser):
     USERNAME_FIELD = "phone_number"
     REQUIRED_FIELDS = ["first_name"]
 
+    def clean(self):
+        """
+        Clean up blank fields to null
+        """
+        if self.email == "":
+            self.email = None
+
     def __str__(self):
         return f"{self.phone_number}"
 
 
 class FamilyCard(models.Model):
     family = models.OneToOneField("core.Family", on_delete=models.CASCADE)
-    card_number = models.IntegerField(_("card number"),null=True, blank=True)
+    card_number = models.IntegerField(_("card number"),null=True, blank=True, unique=True)
     issue_date = models.DateField(_("date of issue"),null=True, blank=True)
     expiry_date = models.DateField(_("date of expiry"),null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_verified = models.BooleanField(default=False)
 
+    def clean(self):
+        """
+        Clean up blank fields to null
+        """
+        if self.card_number == "":
+            self.card_number = None
 
     def __str__(self):
         if self.card_number and self.is_verified:
@@ -109,10 +122,14 @@ class Family(models.Model):
 
     @property
     def members(self):
-        q=0
-        q=User.objects.filter(family=self).values_list('first_name')
-        return ' '.join(map(str, q))
+        q=User.objects.filter(family=self.pk).exclude(family__isnull=True).values_list('first_name')
+        return self.query_to_string(q)
 
+    @staticmethod
+    def query_to_string(query, remove_items_list:str=''):
+        string = ' '.join(map(str, query))
+        return string.replace('(','').replace(')','').replace(',','\n').replace("'",'')
+            
 
     def random_hash_generator(self):
         num = random.randint(0, 99999)
