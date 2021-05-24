@@ -14,25 +14,26 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 # from rest_framework.authtoken import views
-from core import serializers as core_serializers
 from core import views as core_views
+from core import viewsets as core_viewsets
 from django.contrib import admin
 from django.urls import include, path
-from reading import serializers as reading_serializers
+from reading import viewsets as reading_viewsets
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register(r'user', core_serializers.UserViewset)
-router.register(r'family', core_serializers.FamilyViewset)
-router.register(r'familycard', core_serializers.FamilyCardViewset)
+router.register(r'user', core_viewsets.UserViewset)
+router.register(r'family', core_viewsets.FamilyViewset)
+router.register(r'familycard', core_viewsets.FamilyCardViewset)
 
 router_reading = routers.DefaultRouter()
-router_reading.register(
-    r'collection', reading_serializers.BookCollectionViewset)
-router_reading.register(r'book', reading_serializers.BookViewset)
-router_reading.register(r'chapter', reading_serializers.ChapterViewset)
-router_reading.register(r'section', reading_serializers.SectionViewset)
-router_reading.register(r'verse', reading_serializers.VerseViewset)
+router_reading.register(r'reading', reading_viewsets.ReadingViewset)
+# router_reading.register(
+#     r'collection', reading_viewsets.BookCollectionViewset)
+# router_reading.register(r'book', reading_viewsets.BookViewset)
+# router_reading.register(r'chapter', reading_viewsets.ChapterViewset)
+# router_reading.register(r'section', reading_viewsets.SectionViewset)
+# router_reading.register(r'verse', reading_viewsets.VerseViewset)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -40,6 +41,6 @@ urlpatterns = [
     # path('login/', views.obtain_auth_token),
     path('api/core/', include(router.urls)),
     path('api/reading/', include(router_reading.urls)),
-    # path('api/', include(router.urls)),
-    path('api-token-auth/', core_views.CustomObtainAuthToken.as_view(), name='api-tokn-auth')
+    path('api-token-auth/', core_viewsets.CustomObtainAuthToken.as_view(),
+         name='api-tokn-auth')
 ]

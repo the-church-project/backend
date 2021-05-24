@@ -1,3 +1,6 @@
+from core import models as core_models
+from core import serializers as core_serializers
+from django.db import models
 from django.urls import include, path
 from reading import models as reading_models
 from rest_framework import serializers, viewsets
@@ -41,26 +44,9 @@ class VerseSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class BookCollectionViewset(viewsets.ModelViewSet):
-    queryset = reading_models.BookCollection.objects.all()
-    serializer_class = BookCollectionSerializer
+class ReadingSerializer(serializers.ModelSerializer):
+    author = core_serializers.UserSerializer()
 
-
-class BookViewset(viewsets.ModelViewSet):
-    queryset = reading_models.Book.objects.all()
-    serializer_class = BookSerializer
-
-
-class ChapterViewset(viewsets.ModelViewSet):
-    queryset = reading_models.Chapter.objects.all()
-    serializer_class = ChapterSerializer
-
-
-class SectionViewset(viewsets.ModelViewSet):
-    queryset = reading_models.Section.objects.all()
-    serializer_class = SectionSerializer
-
-
-class VerseViewset(viewsets.ModelViewSet):
-    queryset = reading_models.Verse.objects.all()
-    serializer_class = VerseSerializer
+    class Meta:
+        model = reading_models.Reading
+        fields = "__all__"

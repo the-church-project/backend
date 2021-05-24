@@ -1,11 +1,15 @@
+import phonenumber_field
 from django.urls import include, path
+from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers, viewsets
 from rest_framework.authtoken.models import Token
+from rest_framework.fields import ReadOnlyField, SerializerMethodField
 
 from . import models as core_models
 
 
 class UserSerializer(serializers.ModelSerializer):
+    phone_number = PhoneNumberField()
     # token = serializers.SerializerMethodField()
 
     # def get_token(self, obj):
@@ -18,18 +22,21 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = core_models.User
         # fields = '__all__'
-        fields = ['id', 'email', 'phone_number', 'first_name', 'last_name']
+        fields = ['id', 'email', 'first_name', 'last_name', 'phone_number', 'family']
 
 
 class FamilySerializer(serializers.ModelSerializer):
-    members = UserSerializer(many=True)
+    family_members = SerializerMethodField()
+    hash_number = ReadOnlyField()
 
-    # def get_family_members(self, obj):
-    #     return ""
+    def get_family_members(self, obj):
+        q = core_models.User.objects.filter(
+            family=obj.pk, family__isnull=False)
+        return UserSerializer(q, many=True).data
 
     class Meta:
         model = core_models.Family
-        fields = ['family_name', 'hash_number', 'updated_at', 'members']
+        fields = ['id','family_name', 'hash_number', 'family_members']
 
 
 class FamilyCardSerializer(serializers.ModelSerializer):
@@ -42,18 +49,3 @@ class FamilyCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = core_models.FamilyCard
         fields = ["card_number", "expiry_date", "family"]
-
-
-class FamilyViewset(viewsets.ModelViewSet):
-    queryset = core_models.Family.objects.all()
-    serializer_class = FamilySerializer
-
-
-class FamilyCardViewset(viewsets.ModelViewSet):
-    queryset = core_models.FamilyCard.objects.all()
-    serializer_class = FamilyCardSerializer
-
-
-class UserViewset(viewsets.ModelViewSet):
-    queryset = core_models.User.objects.all()
-    serializer_class = UserSerializer

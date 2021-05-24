@@ -99,10 +99,10 @@ class FamilyRegister(forms.ModelForm):
 
     class Meta:
         model = core_models.Family
-        fields = ["username", "family_name"]
+        fields = ["family_name",]
 
 
 class FamilyAdd(forms.ModelForm):
     class Meta:
         model = core_models.Family
-        fields = ["family_name", "username", "hash_number"]
+        fields = ["family_name", "hash_number"]

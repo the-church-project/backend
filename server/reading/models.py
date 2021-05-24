@@ -11,6 +11,7 @@ class BookCollection(models.Model):
     title = models.CharField(_("Name of the collection"), max_length=128)
     description = models.CharField(_("description"), max_length=128)
     is_locked = models.BooleanField(default=False)
+    # multiple = models.ManyToManyField('reading.BookCollection')
 
 
 class Book(models.Model):
@@ -18,7 +19,8 @@ class Book(models.Model):
     author = models.CharField(
         _("Name of the authors"), max_length=128, blank=True, null=True
     )
-    book_collection = models.ForeignKey(BookCollection, on_delete=models.CASCADE)
+    book_collection = models.ForeignKey(
+        BookCollection, on_delete=models.CASCADE)
 
 
 class Chapter(models.Model):
@@ -41,19 +43,25 @@ class Verse(models.Model):
 
 
 class Reading(models.Model):
-    DEFAULT_DAYS = 1
+    DEFAULT_HOURS = 24
 
     title = models.CharField(max_length=128)
     description = models.TextField(null=True, blank=True)
     content = models.TextField()
     date_time = models.DateTimeField(default=now)
     end_time = models.DateTimeField(null=True, blank=True)
-    author = models.ForeignKey("core.User", on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        "core.User", on_delete=models.SET_NULL, null=True)
     # image = models.ImageField(null=True,blank=True)
+
+    @classmethod
+    def with_hours(cls, title, content, author, description='', hours=''):
+        end_time = now() + datetime.timedelta(hours=hours) if hours else ''
+        return cls(title=title, end_time=end_time, description=description, content=content, author=author)
 
     def save(self):
         if not self.end_time:
-            self.end_time = now() + datetime.timedelta(days=self.DEFAULT_DAYS)
+            self.end_time = now() + datetime.timedelta(hours=self.DEFAULT_HOURS)
         super().save()
 
     def __str__(self):

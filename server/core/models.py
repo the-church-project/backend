@@ -139,7 +139,7 @@ class Family(models.Model):
         except:
             return num
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if not self.hash_number:
             self.hash_number = self.random_hash_generator()
         super().save()
