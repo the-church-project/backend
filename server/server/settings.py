@@ -31,7 +31,7 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = ["localhost"]
+ALLOWED_HOSTS = ["localhost, https://the-church-project.herokuapp.com/"]
 
 AUTH_USER_MODEL = "core.User"
 
@@ -156,11 +156,11 @@ STATIC_URL = "/static/"
 
 
 # paytm details
-PAYTM_MERCHANT_ID = env("PAYTM_MERCHANT_ID")
-PAYTM_SECRET_KEY = env("PAYTM_SECRET_KEY")
-PAYTM_WEBSITE = env("PAYTM_WEBSITE")
-PAYTM_CHANNEL_ID = env("PAYTM_CHANNEL_ID")
-PAYTM_INDUSTRY_TYPE_ID = env("PAYTM_INDUSTRY_TYPE_ID")
+# PAYTM_MERCHANT_ID = env("PAYTM_MERCHANT_ID")
+# PAYTM_SECRET_KEY = env("PAYTM_SECRET_KEY")
+# PAYTM_WEBSITE = env("PAYTM_WEBSITE")
+# PAYTM_CHANNEL_ID = env("PAYTM_CHANNEL_ID")
+# PAYTM_INDUSTRY_TYPE_ID = env("PAYTM_INDUSTRY_TYPE_ID")
 
 
 # Admin Details
