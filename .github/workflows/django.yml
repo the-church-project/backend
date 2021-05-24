@@ -1,44 +1,42 @@
 name: Django CI
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
+   push:
+      branches: [master,development]
+   pull_request:
+      branches: [master,development]
+      
 env:
-  DEBUG: ${{ secrets.DEBUG }}
-  SECRET_KEY: ${{ secrets.SECRET_KEY }}
-  PAYTM_MERCHANT_ID: ${{ secrets.PAYTM_MERCHANT_ID }}
-  PAYTM_SECRET_KEY: ${{ secrets.PAYTM_SECRET_KEY }}
-  PAYTM_WEBSITE: ${{ secrets.PAYTM_WEBSITE }}
-  PAYTM_CHANNEL_ID: ${{ secrets.PAYTM_CHANNEL_ID }}
-  PAYTM_INDUSTRY_TYPE_ID: ${{ secrets.PAYTM_INDUSTRY_TYPE_ID }}
-  ADMIN_NAME: ${{ secrets.ADMIN_NAME }}
-  ADMIN_PHONE: ${{ secrets.ADMIN_PHONE }}
-  ADMIN_PASS: ${{ secrets.ADMIN_PASS }}
-
+   DEBUG: ${{ secrets.DEBUG }}
+   SECRET_KEY: ${{ secrets.SECRET_KEY }}
+   PAYTM_MERCHANT_ID: ${{ secrets.PAYTM_MERCHANT_ID }}
+   PAYTM_SECRET_KEY: ${{ secrets.PAYTM_SECRET_KEY }}
+   PAYTM_WEBSITE: ${{ secrets.PAYTM_WEBSITE }}
+   PAYTM_CHANNEL_ID: ${{ secrets.PAYTM_CHANNEL_ID }}
+   PAYTM_INDUSTRY_TYPE_ID: ${{ secrets.PAYTM_INDUSTRY_TYPE_ID }}
+   ADMIN_NAME: ${{ secrets.ADMIN_NAME }}
+   ADMIN_PHONE: ${{ secrets.ADMIN_PHONE }}
+   ADMIN_PASS: ${{ secrets.ADMIN_PASS }}
 
 jobs:
-  build:
+   build:
+      runs-on: ubuntu-latest
+      strategy:
+         max-parallel: 4
+         matrix:
+            python-version: [3.8]
 
-    runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.8]
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install wheel
-        pip install -r requirements.txt
-    - name: Run Tests
-      run: |
-        python server/manage.py test
+      steps:
+         - uses: actions/checkout@v2
+         - name: Set up Python ${{ matrix.python-version }}
+           uses: actions/setup-python@v2
+           with:
+              python-version: ${{ matrix.python-version }}
+         - name: Install Dependencies
+           run: |
+              python -m pip install --upgrade pip
+              pip install wheel
+              pip install -r requirements.txt
+         - name: Run Tests
+           run: |
+              python server/manage.py test

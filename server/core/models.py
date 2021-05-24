@@ -2,7 +2,7 @@ import random
 
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.validators import UnicodeUsernameValidator
+# from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.validators import MaxValueValidator
 from django.db import models
 from django.utils.timezone import now
@@ -49,16 +49,11 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
     username = None
-    email = models.EmailField(
-        _("email address"),
-        unique=True,
-        null=True,
-        blank=True,
-    )
+    email = models.EmailField(_("email address"), null=True, blank=True)
     phone_number = PhoneNumberField(_("phone number"), unique=True)
     dob = models.DateField(null=True, blank=True)
     family = models.ForeignKey(
-        "core.Family", on_delete=models.CASCADE, null=True, blank=True
+        "core.Family", on_delete=models.SET_NULL, null=True, blank=True
     )
     is_poc = models.BooleanField(_("point of contact"), default=False)
     objects = UserManager()
@@ -71,35 +66,38 @@ class User(AbstractUser):
 
 class FamilyCard(models.Model):
     family = models.OneToOneField("core.Family", on_delete=models.CASCADE)
-    card_number = models.IntegerField(_("card number"), blank=True, null=True)
-    issue_date = models.DateField(_("date of issue"), default=now)
-    expiry_date = models.DateField(_("date of expiry"), default=now)
+    card_number = models.IntegerField(_("card number"),null=True, blank=True)
+    issue_date = models.DateField(_("date of issue"),null=True, blank=True)
+    expiry_date = models.DateField(_("date of expiry"),null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_verified = models.BooleanField(default=False)
 
+
     def __str__(self):
-        if self.card_number:
+        if self.card_number and self.is_verified:
             status = "OK"
+        elif self.card_number:
+            status = "VP"
         else:
             status = "NV"
-        return f"{self.family.username}-{status}"
+        return f"{self.family.family_name}-{status}"
 
 
 class Family(models.Model):
-    username_validator = UnicodeUsernameValidator()
+    # username_validator = UnicodeUsernameValidator()
 
+    # username = models.CharField(
+    #     _("username"),
+    #     max_length=150,
+    #     help_text=_(
+    #         "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
+    #     ),
+    #     validators=[username_validator],
+    #     error_messages={
+    #         "unique": _("A user with that username already exists."),
+    #     },
+    # )
     family_name = models.CharField(max_length=256)
-    username = models.CharField(
-        _("username"),
-        max_length=150,
-        help_text=_(
-            "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
-        ),
-        validators=[username_validator],
-        error_messages={
-            "unique": _("A user with that username already exists."),
-        },
-    )
     hash_number = models.PositiveIntegerField(
         validators=[
             MaxValueValidator(99999),
@@ -109,10 +107,17 @@ class Family(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    @property
+    def members(self):
+        q=0
+        q=User.objects.filter(family=self).values_list('first_name')
+        return ' '.join(map(str, q))
+
+
     def random_hash_generator(self):
         num = random.randint(0, 99999)
         try:
-            self.objects.get(hash_number=num, username=self.username)
+            self.objects.get(hash_number=num, family_name=self.family_name)
             self.random_hash_generator()
         except:
             return num
@@ -123,11 +128,11 @@ class Family(models.Model):
         super().save()
 
     def __str__(self):
-        return f"{self.username} #{self.hash_number}"
+        return f"{self.family_name} #{self.hash_number}"
 
     class Meta:
         unique_together = (
-            "username",
+            "family_name",
             "hash_number",
         )
         verbose_name_plural = "Families"

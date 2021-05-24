@@ -3,6 +3,8 @@ from django.conf import settings
 from django.db import models
 from django.shortcuts import reverse
 from django.utils.text import slugify
+
+from activity import models as activity_models
 from payments import models as payment_models
 
 # Create your models here.
