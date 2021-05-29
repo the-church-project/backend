@@ -34,6 +34,7 @@ DEBUG = env("DEBUG")
 ALLOWED_HOSTS = ["localhost, https://the-church-project.herokuapp.com/"]
 
 AUTH_USER_MODEL = "core.User"
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 
 ERROR_MODEL = "core.ErrorLog"
 
