@@ -13,28 +13,41 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
-import django_heroku
-import environ
+from dotenv import load_dotenv
 
-env = environ.Env()
-environ.Env.read_env()
+# import django_heroku
+# import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Env setup to get from file or environment
+load_dotenv(Path.joinpath(BASE_DIR.parent, ".env"))
+env = os.environ
+
+print(Path.joinpath(BASE_DIR.parent, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = env.get('SECRET_KEY', 'sample_unsafe_secret')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG")
+DEBUG = env.get('DEBUG', True)
 
-ALLOWED_HOSTS = ["localhost, https://the-church-project.herokuapp.com/"]
+if not DEBUG:
+    ALLOWED_HOSTS = ["localhost, https://the-church-project.herokuapp.com/"]
+    # can use in production
+    CORS_ORIGIN_WHITELIST = [
+        'http://google.com', 'http://hostname.example.com',
+        'http://localhost:8000', 'http://127.0.0.1:9000'
+    ]
+else:
+    CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = False
 
 AUTH_USER_MODEL = "core.User"
-DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 ERROR_MODEL = "core.ErrorLog"
 
@@ -47,9 +60,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "corsheaders",
     "phonenumber_field",
     "rest_framework",
     "rest_framework.authtoken",
+    'drf_yasg',
     "core.apps.CoreConfig",
     "reading.apps.ReadingConfig",
     # "activity.apps.ActivityConfig",
@@ -60,6 +75,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -72,7 +88,7 @@ ROOT_URLCONF = "server.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.abspath(BASE_DIR/'templates')],
+        "DIRS": [os.path.abspath(BASE_DIR / 'templates')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -87,7 +103,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "server.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -98,22 +113,25 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME":
+        "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "NAME":
+        "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        "NAME":
+        "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        "NAME":
+        "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -124,17 +142,16 @@ LOGOUT_REDIRECT_URL = "/"
 # rest framework settings
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.TokenAuthentication",
-    ),
+    "DEFAULT_AUTHENTICATION_CLASSES":
+    ("rest_framework.authentication.TokenAuthentication", ),
     'DEFAULT_PERMISSION_CLASSES': (
         # 'rest_framework.permissions.IsAuthenticated',
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly', ),
+    'DEFAULT_PAGINATION_CLASS':
+    'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE':
+    10
 }
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -149,13 +166,15 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = "/"
 
+if not DEBUG:
+    STATIC_ROOT = "/"
+else:
+    pass
 
 # paytm details
 # PAYTM_MERCHANT_ID = env("PAYTM_MERCHANT_ID")
@@ -164,14 +183,13 @@ STATIC_ROOT = "/"
 # PAYTM_CHANNEL_ID = env("PAYTM_CHANNEL_ID")
 # PAYTM_INDUSTRY_TYPE_ID = env("PAYTM_INDUSTRY_TYPE_ID")
 
-
 # Admin Details
-ADMIN_NAME = env("ADMIN_NAME")
-ADMIN_PHONE = env("ADMIN_PHONE")
-ADMIN_PASS = env("ADMIN_PASS")
+ADMIN_NAME = env.get("ADMIN_NAME")
+ADMIN_PHONE = env.get("ADMIN_PHONE")
+ADMIN_PASS = env.get("ADMIN_PASS")
 
 # celery
 CELERY_BROKER_URL = "redis://localhost:6379"
 
 # Activate Django-Heroku.
-django_heroku.settings(locals())
+# django_heroku.settings(locals())

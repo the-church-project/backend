@@ -16,10 +16,13 @@ Including another URLconf
 # from rest_framework.authtoken import views
 from core import views as core_views
 from core import viewsets as core_viewsets
+from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 from reading import viewsets as reading_viewsets
 from rest_framework import routers
+
+from . import viewsets
 
 router = routers.DefaultRouter()
 router.register(r'user', core_viewsets.UserViewset)
@@ -27,7 +30,7 @@ router.register(r'family', core_viewsets.FamilyViewset)
 router.register(r'familycard', core_viewsets.FamilyCardViewset)
 
 router_reading = routers.DefaultRouter()
-router_reading.register(r'reading', reading_viewsets.ReadingViewset)
+router_reading.register(r'blog', reading_viewsets.ReadingViewset)
 # router_reading.register(
 #     r'collection', reading_viewsets.BookCollectionViewset)
 # router_reading.register(r'book', reading_viewsets.BookViewset)
@@ -35,12 +38,25 @@ router_reading.register(r'reading', reading_viewsets.ReadingViewset)
 # router_reading.register(r'section', reading_viewsets.SectionViewset)
 # router_reading.register(r'verse', reading_viewsets.VerseViewset)
 
+development_urls = []
+
+if settings.DEBUG:
+    development_urls = [
+        path("swagger<format>", viewsets.schema_view.without_ui(cache_timeout=0), name='schema-json'),
+        path('swagger/',
+             viewsets.schema_view.with_ui('swagger', cache_timeout=0),
+             name='schema-swagger-ui'),
+        path('redoc/',
+             viewsets.schema_view.with_ui('redoc', cache_timeout=0),
+             name='schema-redoc'),
+    ]
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-    # path('api-auth/', include('rest_framework.urls')),
-    # path('login/', views.obtain_auth_token),
+    path('api/create-user/', core_viewsets.CreateUserViewset.as_view()),
     path('api/core/', include(router.urls)),
     path('api/reading/', include(router_reading.urls)),
-    path('api-token-auth/', core_viewsets.CustomObtainAuthToken.as_view(),
-         name='api-tokn-auth')
-]
+    path('api/api-token-auth/',
+         core_viewsets.CustomObtainAuthToken.as_view(),
+         name='api-token-auth')
+] + development_urls

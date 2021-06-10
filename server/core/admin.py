@@ -14,4 +14,4 @@ class FamilyAdmin(admin.ModelAdmin):
 admin.site.register(User)
 admin.site.register(Family, FamilyAdmin)
 admin.site.register(FamilyCard)
-admin.site.register(ErrorLog)
+# admin.site.register(ErrorLog)

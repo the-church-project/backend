@@ -52,9 +52,10 @@ class User(AbstractUser):
     email = models.EmailField(_("email address"), null=True, blank=True)
     phone_number = PhoneNumberField(_("phone number"), unique=True)
     dob = models.DateField(null=True, blank=True)
-    family = models.ForeignKey(
-        "core.Family", on_delete=models.SET_NULL, null=True, blank=True
-    )
+    family = models.ForeignKey("core.Family",
+                               on_delete=models.SET_NULL,
+                               null=True,
+                               blank=True)
     is_poc = models.BooleanField(_("point of contact"), default=False)
     objects = UserManager()
     USERNAME_FIELD = "phone_number"
@@ -73,9 +74,12 @@ class User(AbstractUser):
 
 class FamilyCard(models.Model):
     family = models.OneToOneField("core.Family", on_delete=models.CASCADE)
-    card_number = models.IntegerField(_("card number"),null=True, blank=True, unique=True)
-    issue_date = models.DateField(_("date of issue"),null=True, blank=True)
-    expiry_date = models.DateField(_("date of expiry"),null=True, blank=True)
+    card_number = models.IntegerField(_("card number"),
+                                      null=True,
+                                      blank=True,
+                                      unique=True)
+    issue_date = models.DateField(_("date of issue"), null=True, blank=True)
+    expiry_date = models.DateField(_("date of expiry"), null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_verified = models.BooleanField(default=False)
 
@@ -86,14 +90,18 @@ class FamilyCard(models.Model):
         if self.card_number == "":
             self.card_number = None
 
-    def __str__(self):
+    @property
+    def status(self):
         if self.card_number and self.is_verified:
             status = "OK"
         elif self.card_number:
             status = "VP"
         else:
             status = "NV"
-        return f"{self.family.family_name}-{status}"
+        return status
+
+    def __str__(self):
+        return f"{self.family.family_name}-{self.status}"
 
 
 class Family(models.Model):
@@ -122,14 +130,14 @@ class Family(models.Model):
 
     @property
     def members(self):
-        q=User.objects.filter(family=self.pk).exclude(family__isnull=True).values_list('first_name')
+        q = User.objects.filter(family=self.pk).exclude(
+            family__isnull=True).values_list('first_name')
         return self.query_to_string(q)
 
     @staticmethod
-    def query_to_string(query, remove_items_list:str=''):
+    def query_to_string(query, remove_items_list: str = ''):
         string = ' '.join(map(str, query))
-        return string.replace('(','').replace(')','').replace(',','\n').replace("'",'')
-
+        return string.replace('(', '').replace(')', '').replace("'", '')
 
     def random_hash_generator(self):
         num = random.randint(0, 99999)
