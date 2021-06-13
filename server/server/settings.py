@@ -43,7 +43,7 @@ if not DEBUG:
 else:
     CORS_ORIGIN_ALLOW_ALL = True
     ALLOWED_HOSTS = ["*"]
-    
+
 CORS_ALLOW_CREDENTIALS = False
 
 AUTH_USER_MODEL = "core.User"

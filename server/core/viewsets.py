@@ -1,12 +1,11 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from django.urls import include, path
-from rest_framework import permissions, viewsets, status
+from rest_framework import permissions, status, viewsets
 from rest_framework.authtoken import views
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.contrib.auth import login
 
 from . import models as core_models
 from .serializers import *

@@ -32,7 +32,7 @@ up: ## run docker compose and start the Docker container in the background
 
 build: ## Access the Postgres Docker database interactively with psql
 	docker-compose build
-	
+
 .PHONY: test
 test: ## Run tests
 	$(PYTHON) $(APP_DIR)/manage.py test application --verbosity=0 --parallel --failfast

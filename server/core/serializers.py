@@ -19,7 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     # def __init__(self, *args, **kwargs):
     #     remove_fields = kwargs.pop('remove_fields', None)
-    #     if remove_fields: 
+    #     if remove_fields:
     #         for field_name in remove_fields:
     #             try:
     #                 self.Meta.fields.remove(field_name)
