@@ -2,7 +2,6 @@ import random
 
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
-# from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.validators import MaxValueValidator
 from django.db import models
 from django.utils.timezone import now
@@ -67,6 +66,12 @@ class User(AbstractUser):
         """
         if self.email == "":
             self.email = None
+        if self.name:
+            self.name = self.name.strip()
+
+    @property
+    def full_name(self):
+        return self.first_name + " " + self.last_name
 
     def __str__(self):
         return f"{self.phone_number}"
@@ -105,19 +110,6 @@ class FamilyCard(models.Model):
 
 
 class Family(models.Model):
-    # username_validator = UnicodeUsernameValidator()
-
-    # username = models.CharField(
-    #     _("username"),
-    #     max_length=150,
-    #     help_text=_(
-    #         "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
-    #     ),
-    #     validators=[username_validator],
-    #     error_messages={
-    #         "unique": _("A user with that username already exists."),
-    #     },
-    # )
     family_name = models.CharField(max_length=256)
     hash_number = models.PositiveIntegerField(
         validators=[

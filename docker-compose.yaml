@@ -4,7 +4,7 @@ services:
       build: .
       container_name: church-server
       ports:
-       - "8000:8000"
+       - "192.168.1.9:8000:8000"
       env_file:
         - .env
       volumes:

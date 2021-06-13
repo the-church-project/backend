@@ -53,7 +53,7 @@ if settings.DEBUG:
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('api/create-user/', core_viewsets.CreateUserViewset.as_view()),
+    # path('api/create-user/', core_viewsets.CreateUserViewset.as_view()),
     path('api/core/', include(router.urls)),
     path('api/reading/', include(router_reading.urls)),
     path('api/api-token-auth/',

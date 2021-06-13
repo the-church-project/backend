@@ -10,19 +10,59 @@ from . import models as core_models
 
 class UserSerializer(serializers.ModelSerializer):
     phone_number = PhoneNumberField()
-    # token = serializers.SerializerMethodField()
 
-    # def get_token(self, obj):
-    #     try:
-    #         token = Token.objects.get(user_id=obj.id)
-    #         return token.key
-    #     except Token.DoesNotExist:
-    #         return "token failed create a new one"
+    def create(self, validated_data):
+        user = super().create(validated_data)
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
+
+    # def __init__(self, *args, **kwargs):
+    #     remove_fields = kwargs.pop('remove_fields', None)
+    #     if remove_fields: 
+    #         for field_name in remove_fields:
+    #             try:
+    #                 self.Meta.fields.remove(field_name)
+    #             except:
+    #                 pass
+    #     super().__init__(*args, **kwargs)
 
     class Meta:
         model = core_models.User
         # fields = '__all__'
-        fields = ['id', 'email', 'first_name', 'last_name', 'phone_number', 'family']
+        fields = [
+            'id',
+            'email',
+            'first_name',
+            'last_name',
+            'phone_number',
+            'family',
+            'password',
+            'dob',
+        ]
+        extra_kwargs = {
+            'password': {
+                'write_only': True
+            },
+            'family': {
+                'read_only': True
+            },
+            'first_name': {
+                'required': True
+            }
+        }
+
+
+class UserSerializerSmall(serializers.ModelSerializer):
+    phone_number = PhoneNumberField()
+
+    class Meta:
+        model = core_models.User
+        fields = [
+            'id',
+            'full_name',
+            'phone_number',
+        ]
 
 
 class FamilySerializer(serializers.ModelSerializer):
@@ -30,13 +70,13 @@ class FamilySerializer(serializers.ModelSerializer):
     hash_number = ReadOnlyField()
 
     def get_family_members(self, obj):
-        q = core_models.User.objects.filter(
-            family=obj.pk, family__isnull=False)
-        return UserSerializer(q, many=True).data
+        q = core_models.User.objects.filter(family=obj.pk,
+                                            family__isnull=False)
+        return UserSerializerSmall(q, many=True).data
 
     class Meta:
         model = core_models.Family
-        fields = ['id','family_name', 'hash_number', 'family_members']
+        fields = ['id', 'family_name', 'hash_number', 'family_members']
 
 
 class FamilyCardSerializer(serializers.ModelSerializer):

@@ -25,8 +25,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(Path.joinpath(BASE_DIR.parent, ".env"))
 env = os.environ
 
-print(Path.joinpath(BASE_DIR.parent, ".env"))
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -44,6 +42,8 @@ if not DEBUG:
     ]
 else:
     CORS_ORIGIN_ALLOW_ALL = True
+    ALLOWED_HOSTS = ["*"]
+    
 CORS_ALLOW_CREDENTIALS = False
 
 AUTH_USER_MODEL = "core.User"
