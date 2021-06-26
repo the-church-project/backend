@@ -30,13 +30,7 @@ router.register(r'family', core_viewsets.FamilyViewset)
 router.register(r'familycard', core_viewsets.FamilyCardViewset)
 
 router_reading = routers.DefaultRouter()
-router_reading.register(r'blog', reading_viewsets.ReadingViewset)
-# router_reading.register(
-#     r'collection', reading_viewsets.BookCollectionViewset)
-# router_reading.register(r'book', reading_viewsets.BookViewset)
-# router_reading.register(r'chapter', reading_viewsets.ChapterViewset)
-# router_reading.register(r'section', reading_viewsets.SectionViewset)
-# router_reading.register(r'verse', reading_viewsets.VerseViewset)
+router_reading.register(r'blog', reading_viewsets.BlogViewset)
 
 development_urls = []
 

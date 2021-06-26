@@ -54,7 +54,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserSerializerSmall(serializers.ModelSerializer):
-    phone_number = PhoneNumberField()
+    phone_number = PhoneNumberField(required=False)
+    full_name = ReadOnlyField()
 
     class Meta:
         model = core_models.User
@@ -63,10 +64,15 @@ class UserSerializerSmall(serializers.ModelSerializer):
             'full_name',
             'phone_number',
         ]
+        extra_kwargs = {
+            'id': {
+                'required': True
+            },
+        }
 
 
 class FamilySerializer(serializers.ModelSerializer):
-    family_members = SerializerMethodField()
+    family_members = UserSerializerSmall(many=True, required=False)
     hash_number = ReadOnlyField()
 
     def get_family_members(self, obj):
@@ -74,9 +80,35 @@ class FamilySerializer(serializers.ModelSerializer):
                                             family__isnull=False)
         return UserSerializerSmall(q, many=True).data
 
+    def create(self, obj):
+        family_members = getattr(obj, 'family_members', [])
+        family = self.Meta.model.objects.create(**obj)
+        family.family_members.set([
+            self.context['request'].user,
+        ])
+        return family
+
+    def update(self, instance, validated_data):
+        fam_members = getattr(validated_data, 'family_members', [])
+        if instance.family_members.filter(id=self.context['request'].user.id):
+            fam = super().update(instance, validated_data)
+            if fam_members:
+                fam.family_members.set([
+                    *fam_members,
+                ])
+            return fam
+        else:
+            raise Exception("Cannot Edit Family if not a part of it")
+
+
     class Meta:
         model = core_models.Family
-        fields = ['id', 'family_name', 'hash_number', 'family_members']
+        fields = [
+            'id',
+            'family_name',
+            'hash_number',
+            'family_members',
+        ]
 
 
 class FamilyCardSerializer(serializers.ModelSerializer):

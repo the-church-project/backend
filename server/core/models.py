@@ -51,7 +51,7 @@ class User(AbstractUser):
     email = models.EmailField(_("email address"), null=True, blank=True)
     phone_number = PhoneNumberField(_("phone number"), unique=True)
     dob = models.DateField(null=True, blank=True)
-    family = models.ForeignKey("core.Family",
+    family = models.ForeignKey("core.Family", related_name='family_members',
                                on_delete=models.SET_NULL,
                                null=True,
                                blank=True)
@@ -66,8 +66,10 @@ class User(AbstractUser):
         """
         if self.email == "":
             self.email = None
-        if self.name:
-            self.name = self.name.strip()
+        if self.first_name:
+            self.first_name = self.first_name.strip()
+        if self.last_name:
+            self.last_name = self.last_name.strip()
 
     @property
     def full_name(self):
@@ -78,7 +80,9 @@ class User(AbstractUser):
 
 
 class FamilyCard(models.Model):
-    family = models.OneToOneField("core.Family", on_delete=models.CASCADE)
+    family = models.OneToOneField("core.Family",
+                                  on_delete=models.CASCADE,
+                                  related_name='card')
     card_number = models.IntegerField(_("card number"),
                                       null=True,
                                       blank=True,

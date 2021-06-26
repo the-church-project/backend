@@ -7,46 +7,45 @@ from rest_framework import serializers, viewsets
 from rest_framework.authtoken.models import Token
 
 
-class BookCollectionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = reading_models.BookCollection
-        fields = "__all__"
-
-
-class BookSerializer(serializers.ModelSerializer):
-    book_collection = BookCollectionSerializer()
-
-    class Meta:
-        model = reading_models.Book
-        fields = "__all__"
-
-
-class ChapterSerializer(serializers.ModelSerializer):
-    book = BookSerializer()
-
-    class Meta:
-        model = reading_models.Chapter
-        fields = "__all__"
-
-
-class SectionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = reading_models.Section
-        fields = "__all__"
-
-
-class VerseSerializer(serializers.ModelSerializer):
-    section = SectionSerializer()
-    chapter = ChapterSerializer()
-
-    class Meta:
-        model = reading_models.Verse
-        fields = "__all__"
-
-
-class ReadingSerializer(serializers.ModelSerializer):
+class BlogSerializer(serializers.ModelSerializer):
     author = core_serializers.UserSerializer()
 
     class Meta:
-        model = reading_models.Reading
+        model = reading_models.Blog
         fields = "__all__"
+
+# class BookCollectionSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = reading_models.BookCollection
+#         fields = "__all__"
+
+
+# class BookSerializer(serializers.ModelSerializer):
+#     book_collection = BookCollectionSerializer()
+
+#     class Meta:
+#         model = reading_models.Book
+#         fields = "__all__"
+
+
+# class ChapterSerializer(serializers.ModelSerializer):
+#     book = BookSerializer()
+
+#     class Meta:
+#         model = reading_models.Chapter
+#         fields = "__all__"
+
+
+# class SectionSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = reading_models.Section
+#         fields = "__all__"
+
+
+# class VerseSerializer(serializers.ModelSerializer):
+#     section = SectionSerializer()
+#     chapter = ChapterSerializer()
+
+#     class Meta:
+#         model = reading_models.Verse
+#         fields = "__all__"
